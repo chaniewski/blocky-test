@@ -17,6 +17,7 @@ class BlockGrid {
   }
 
   render(el = document.getElementById('gridEl')) {
+    el.innerHTML = '';
     for (let x = 0; x < this.width; x++) {
       const id = 'col_' + x;
       const colEl = document.createElement('div');
@@ -25,22 +26,77 @@ class BlockGrid {
       el.appendChild(colEl);
 
       for (let y = this.height - 1; y >= 0; y--) {
-        const block = this.grid[x][y];
-        const id = `block_${x}x${y}`;
-        const blockEl = document.createElement('div');
+        const block = this.safeGetBlock(x,y);
+        if(block) {
+          const id = `block_${x}x${y}`;
+          const blockEl = document.createElement('div');
 
-        blockEl.id = id;
-        blockEl.className = 'block';
-        blockEl.style.background = block.colour;
-        blockEl.addEventListener('click', evt => this.blockClicked(evt, block));
-        colEl.appendChild(blockEl);
+          blockEl.id = id;
+          blockEl.className = 'block';
+          blockEl.style.background = block.colour;
+          blockEl.addEventListener('click', evt => this.blockClicked(evt, block));
+          colEl.appendChild(blockEl);
+        }
       }
     }
   }
 
   blockClicked(e, block) {
     console.log(e, block);
+    this.findBlocksToDelete(block, block.colour);
+    this.deleteBlocks();
+    this.render();
+  }
+
+  findBlocksToDelete(block, colour) {
+    // exit the recursion if block is wrong colour, or already marked for deletion (loop prevention)
+    if(!block || block.toBeDeleted || block.colour != colour) {
+      return;
+    }
+
+    block.toBeDeleted = true;
+    console.log('DELETE', block);
+
+    // below
+    this.findBlocksToDelete(this.safeGetBlock(block.x, block.y-1), colour);
+    // above
+    this.findBlocksToDelete(this.safeGetBlock(block.x, block.y+1), colour);
+    // left
+    this.findBlocksToDelete(this.safeGetBlock(block.x-1, block.y), colour);
+    // right
+    this.findBlocksToDelete(this.safeGetBlock(block.x+1, block.y), colour);
+  }
+
+  deleteBlocks() {
+    for(let x = 0; x < this.width; x++) {
+      const col = this.grid[x];
+      var newCol = [];
+      for(let y = 0; y < col.length; y++) {
+        var block = col[y];
+        if(!block.toBeDeleted) {
+          block.y = newCol.length;
+          newCol.push(block);
+        }
+      }
+
+      this.grid[x] = newCol;
+    }
+  }
+
+  safeGetBlock(x, y) {
+    if(x < 0 || x >= this.width) {
+      return null;
+    }
+  
+    var col = this.grid[x];
+    if(y < 0 || y >= col.length){
+      return null;
+    }
+  
+    return col[y];
   }
 }
+
+
 
 export default BlockGrid;

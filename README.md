@@ -1,5 +1,11 @@
 # Blocky Puzzle
 
+## Solution notes
+* For propagating the "click" change, I've used recursion.
+* I decided to focus on manipulation of the BlockGrid object instead of DOM, in a real-world scenario the mapping from the model to UI would be solved by using an UI framework (React, Angular...)
+* Therefore, the updates to UI are drawn by completely destroying the board and redrawing it from scratch. UI framework would handle incremental updates better. The extra benefit of this approach is that the newly drawn blocks will have IDs that correspond to the grid positions. The cost is rendering the whole page on each click. 
+* In the given application skeleton, the blocks didn't use absolute positioning, but were floated by the browser rendering engine using `float: left` css attribute. I have decided to follow this approach, but changed the floats to a flexbox model to get the "gravity" for free.
+
 ## To get started
 
 You will need a recent version of [Node]. If you do not have it installed already, we find [nvm] to be a handy script to install and even juggle between versions of Node without too much hassle.
