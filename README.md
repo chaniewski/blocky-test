@@ -3,7 +3,8 @@
 ## Solution notes
 * For propagating the "click" change, I've used recursion.
 * I decided to focus on manipulation of the BlockGrid object instead of DOM, in a real-world scenario the mapping from the model to UI would be solved by using an UI framework (React, Angular...)
-* Therefore, the updates to UI are drawn by completely destroying the board and redrawing it from scratch. UI framework would handle incremental updates better. The extra benefit of this approach is that the newly drawn blocks will have IDs that correspond to the grid positions. The cost is rendering the whole page on each click. 
+* ~~Therefore, the updates to UI are drawn by completely destroying the board and redrawing it from scratch. UI framework would handle incremental updates better. The extra benefit of this approach is that the newly drawn blocks will have IDs that correspond to the grid positions. The cost is rendering the whole page on each click.~~
+* I hope it's not too late (04.08.2020 13:24) - I've changed the rendering to only apply changes; this also means I was able to add some nice CSS animations. I was supposed to have fun with this task, after all!
 * In the given application skeleton, the blocks didn't use absolute positioning, but were floated by the browser rendering engine using `float: left` css attribute. I have decided to follow this approach, but changed the floats to a flexbox model to get the "gravity" for free.
 
 ## To get started

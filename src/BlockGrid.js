@@ -45,7 +45,6 @@ class BlockGrid {
     console.log(e, block);
     this.findBlocksToDelete(block, block.colour);
     this.deleteBlocks();
-    this.render();
   }
 
   findBlocksToDelete(block, colour) {
@@ -73,9 +72,16 @@ class BlockGrid {
       var newCol = [];
       for(let y = 0; y < col.length; y++) {
         var block = col[y];
+        var blockEl = document.getElementById(`block_${x}x${y}`);
         if(!block.toBeDeleted) {
           block.y = newCol.length;
+          blockEl.id = `block_${x}x${block.y}`;
           newCol.push(block);
+        } else {
+          blockEl.className = 'block deleted';
+          blockEl.addEventListener('webkitTransitionEnd', function(evt) {
+            this.parentElement.removeChild(this);
+          }, false);
         }
       }
 
