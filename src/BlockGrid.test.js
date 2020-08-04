@@ -62,6 +62,8 @@ describe('BlockGrid behaviours', () => {
     testGrid[3][2].colour = COLOURS[2];
     testGrid[3][1].colour = COLOURS[2];
     testGrid[3][0].colour = COLOURS[3];
+
+    testGridObject.render();
   });
 
   it('removes a single block if the clicked block is isolated', () => {
